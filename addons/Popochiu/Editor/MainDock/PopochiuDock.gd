@@ -1,5 +1,4 @@
 tool
-class_name PopochiuDock
 extends Panel
 # Define un conjunto de botones y otros elementos para centralizar la
 # configuración de los diferentes nodos que conforman el juego:
@@ -16,6 +15,8 @@ const ROOMS_PATH := 'res://popochiu/Rooms/'
 const CHARACTERS_PATH := 'res://popochiu/Characters/'
 const INVENTORY_ITEMS_PATH := 'res://popochiu/InventoryItems/'
 const DIALOGS_PATH := 'res://popochiu/Dialogs/'
+const PopochiuObjectRow := preload('ObjectRow/PopochiuObjectRow.gd')
+const Popochiu := preload('res://addons/Popochiu/Engine/Popochiu.gd')
 
 var ei: EditorInterface
 var fs: EditorFileSystem
@@ -100,6 +101,9 @@ func fill_data() -> void:
 		var type_dir: EditorFileSystemDirectory = fs.get_filesystem_path(
 			_types[t].path
 		)
+		
+		if not is_instance_valid(type_dir):
+			continue
 
 		for d in type_dir.get_subdir_count():
 			var dir: EditorFileSystemDirectory = type_dir.get_subdir(d)
@@ -234,6 +238,8 @@ func set_main_scene(path: String) -> void:
 
 
 func search_audio_files() -> void:
+	if not is_instance_valid(_tab_audio): return
+	
 	_tab_audio.search_audio_files()
 
 

@@ -1,5 +1,4 @@
 tool
-class_name DialogOption
 extends Resource
 
 export var id := '' setget _set_id

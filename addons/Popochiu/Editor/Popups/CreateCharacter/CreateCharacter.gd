@@ -1,12 +1,11 @@
 tool
-extends CreationPopup
+extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 # Permite crear un nuevo personaje con los archivos necesarios para que funcione
 # en el Popochiu: CharacterCCC.tscn, CharacterCCC.gd, CharacterCCC.tres.
 
-const CHARACTER_SCRIPT_TEMPLATE :=\
-'res://addons/Popochiu/Engine/Templates/CharacterTemplate.gd'
-const CHARACTER_SCENE :=\
-'res://addons/Popochiu/Engine/Objects/Character/PopochiuCharacter.tscn'
+const CHARACTER_SCRIPT_TEMPLATE := 'res://addons/Popochiu/Engine/Templates/CharacterTemplate.gd'
+const CHARACTER_SCENE := 'res://addons/Popochiu/Engine/Objects/Character/PopochiuCharacter.tscn'
+const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
 
 var _new_character_name := ''
 var _new_character_path := ''
@@ -54,7 +53,7 @@ func create() -> void:
 	new_character.script_name = _new_character_name
 	new_character.name = 'Character' + _new_character_name
 	new_character.description = _new_character_name
-	new_character.cursor = Cursor.Type.TALK
+	new_character.cursor = CURSOR_TYPE.TALK
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Crear el archivo de la escena

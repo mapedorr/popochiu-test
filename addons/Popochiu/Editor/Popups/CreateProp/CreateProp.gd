@@ -1,11 +1,12 @@
 tool
-extends CreationPopup
+extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 # Permite crear una nueva Prop para una habitación. De tener interacción, se le
 # asignará un script que quedará guardado en la carpeta Props de la carpeta de
 # la habitación a la que pertenece.
 
 const PROP_SCRIPT_TEMPLATE := 'res://addons/Popochiu/Engine/Templates/PropTemplate.gd'
 const BASE_PROP_PATH := 'res://addons/Popochiu/Engine/Objects/Prop/Prop.tscn'
+const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
 
 var room_tab: VBoxContainer = null
 
@@ -47,11 +48,19 @@ func create() -> void:
 	# TODO: Eliminar archivos creados si la creación no se completa.
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-	# Crear el directorio donde se guardará la nueva prop
-	assert(
-		_main_dock.dir.make_dir_recursive(_new_prop_path.get_base_dir()) == OK,
-		'[Popochiu] Could not create Props folder for ' + _room_path.get_file()
-	)
+	if _interaction_checkbox.pressed:
+		# Crear el directorio donde se guardará la nueva prop
+		assert(
+			_main_dock.dir.make_dir_recursive(_new_prop_path.get_base_dir()) == OK,
+			'[Popochiu] Could not create prop folder for ' + _new_prop_name
+		)
+	elif not _main_dock.dir.dir_exists(_room_dir + '/Props/'):
+		# If the Prop doesn't have interaction, just try to create the Props
+		# folder to store there the assets that will be used by the Prop
+		assert(
+			_main_dock.dir.make_dir_recursive(_room_dir + '/Props/') == OK,
+			'[Popochiu] Could not create Props folder for ' + _room_path.get_file()
+		)
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Crear el script de la prop (si tiene interacción)
@@ -71,7 +80,7 @@ func create() -> void:
 	prop.script_name = _new_prop_name
 	prop.description = _new_prop_name
 	prop.clickable = _interaction_checkbox.pressed
-	prop.cursor = Cursor.Type.USE
+	prop.cursor = CURSOR_TYPE.ACTIVE
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Agregar la prop a su habitación
@@ -87,6 +96,11 @@ func create() -> void:
 	# Abrir las propiedades de la prop creada en el Inspector
 	yield(get_tree().create_timer(0.1), 'timeout')
 	_main_dock.ei.edit_node(prop)
+	
+	if _interaction_checkbox.pressed:
+		_main_dock.ei.select_file(_new_prop_path + '.gd')
+	else:
+		_main_dock.ei.select_file(_room_path)
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Fin

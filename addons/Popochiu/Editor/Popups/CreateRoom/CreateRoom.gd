@@ -1,5 +1,5 @@
 tool
-extends CreationPopup
+extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 # Permite crear una nueva habitación con los archivos necesarios para que funcione
 # en el Popochiu: RoomRRR.tscn, RoomRRR.gd, RoomRRR.tres.
 

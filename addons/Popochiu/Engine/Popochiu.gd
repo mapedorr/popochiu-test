@@ -1,6 +1,5 @@
-class_name Popochiu
 extends Node
-# (E) El núcleo de Popochiu
+# (E) Popochiu's core
 
 signal inline_dialog_requested(options)
 signal text_speed_changed(idx)
@@ -218,6 +217,9 @@ func room_readied(room: PopochiuRoom) -> void:
 			room.add_character(C.player)
 		
 		yield(C.player.idle(false), 'completed')
+	
+	for c in get_tree().get_nodes_in_group('PopochiuClickable'):
+		c.room = room
 
 	room.on_room_entered()
 

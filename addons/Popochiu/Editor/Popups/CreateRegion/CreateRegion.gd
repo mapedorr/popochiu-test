@@ -1,5 +1,5 @@
 tool
-extends CreationPopup
+extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 # Permite crear una nueva Region para una habitación.
 
 const SCRIPT_TEMPLATE := 'res://addons/Popochiu/Engine/Templates/RegionTemplate.gd'

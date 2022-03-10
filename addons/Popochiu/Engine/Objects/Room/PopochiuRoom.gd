@@ -289,7 +289,7 @@ func _check_z_indexes(chr: PopochiuCharacter) -> void:
 
 
 func _check_baseline(nde: Node, chr_y_pos: float, z := 1) -> void:
-	if not nde is Clickable: return
+	if not nde.is_in_group('PopochiuClickable'): return
 	var baseline: float = nde.to_global(Vector2.DOWN * nde.baseline).y
 	nde.z_index = z if baseline > chr_y_pos else 0
 

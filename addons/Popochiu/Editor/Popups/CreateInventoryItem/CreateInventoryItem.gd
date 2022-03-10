@@ -1,5 +1,5 @@
 tool
-extends CreationPopup
+extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 # Permite crear un nuevo ítem de inventario con los archivos necesarios para que
 # funcione en el Popochiu: InventoryIII.tscn, InventoryIII.gd, InventoryIII.tres.
 

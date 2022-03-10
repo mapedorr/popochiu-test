@@ -1,8 +1,9 @@
-class_name DialogMenu
 extends Container
 
 signal shown
 signal hidden
+
+const DialogOption := preload('res://addons/Popochiu/Engine/Objects/Dialog/DialogOption.gd')
 
 export var option_scene: PackedScene
 export var default: Color = Color('5B6EE1')

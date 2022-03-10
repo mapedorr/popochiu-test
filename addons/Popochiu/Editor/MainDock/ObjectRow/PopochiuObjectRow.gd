@@ -1,5 +1,4 @@
 tool
-class_name PopochiuObjectRow
 extends HBoxContainer
 # NOTA: El icono para el menú contextual podría ser el icon_GUI_tab_menu_hl.svg
 #		de los iconos de Godot.
@@ -9,6 +8,8 @@ signal clicked(node)
 enum MenuOptions { ADD_TO_CORE, SET_AS_MAIN, DELETE }
 
 const SELECTED_FONT_COLOR := Color('706deb')
+const Popochiu := preload('res://addons/Popochiu/Engine/Popochiu.gd')
+const AudioCue := preload('res://addons/Popochiu/Engine/AudioManager/AudioCue.gd')
 
 var type := -1
 var path := ''
@@ -47,7 +48,13 @@ onready var _menu_cfg := [
 	{
 		id = MenuOptions.DELETE,
 		icon = get_icon('Remove', 'EditorIcons'),
-		label = 'Remove'
+		label = 'Remove',
+		types = [
+			main_dock.Types.ROOM,
+			main_dock.Types.CHARACTER,
+			main_dock.Types.INVENTORY_ITEM,
+			main_dock.Types.DIALOG
+		]
 	}
 ]
 

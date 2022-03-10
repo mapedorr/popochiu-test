@@ -1,6 +1,6 @@
 tool
 class_name Hotspot, 'res://addons/Popochiu/icons/hotspot.png'
-extends Clickable
+extends 'res://addons/Popochiu/Engine/Objects/Clickable/Clickable.gd'
 # Permite crear áreas con las que se puede interactuar.
 # Ej: El cielo, algo que haga parte de la imagen de fondo.
 

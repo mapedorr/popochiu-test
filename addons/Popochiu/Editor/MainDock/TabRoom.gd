@@ -4,6 +4,8 @@ extends VBoxContainer
 
 signal row_clicked
 
+const PopochiuObjectRow := preload('ObjectRow/PopochiuObjectRow.gd')
+
 enum Types { PROP = 4, HOTSPOT, REGION, POINT }
 
 var opened_room: PopochiuRoom = null

@@ -1,6 +1,6 @@
 tool
 class_name PopochiuCharacter, 'res://addons/Popochiu/icons/character.png'
-extends Clickable
+extends 'res://addons/Popochiu/Engine/Objects/Clickable/Clickable.gd'
 # Cualquier objeto que pueda hablar, caminar, moverse entre habitaciones, tener
 # inventario, entre otras muchas cosas.
 
@@ -17,7 +17,6 @@ export var texture: Texture setget _set_texture
 export var vo_name := ''
 export var follow_player := false
 
-var room := ''
 var last_room := ''
 var anim_suffix := ''
 var is_moving := false

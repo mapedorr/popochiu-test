@@ -2,6 +2,8 @@ tool
 class_name PopochiuDialog, 'res://addons/Popochiu/icons/dialog.png'
 extends Resource
 
+const DialogOption := preload('DialogOption.gd')
+
 export(Array, Resource) var options := [] setget _set_options
 export var script_name := ''
 

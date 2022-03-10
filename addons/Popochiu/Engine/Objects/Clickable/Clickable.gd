@@ -1,23 +1,29 @@
 tool
-class_name Clickable
 extends Area2D
 # Permite definir colisiones que reaccionan a los eventos de clic y entrada y
 # salida del cursor.
+
+const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
+#const PopochiuRoom := preload('res://addons/Popochiu/Engine/Objects/Room/PopochiuRoom.gd')
 
 export var description := ''
 export var clickable := true
 export var baseline := 0 setget _set_baseline
 export var walk_to_point: Vector2 setget _set_walk_to_point
 export var look_at_point: Vector2
-export(Cursor.Type) var cursor
+export(CURSOR_TYPE) var cursor
 export var script_name := ''
 export var always_on_top := false
+
+var room: Node2D = null
 
 onready var _description_code := description
 
 
 # ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ métodos de Godot ░░░░
 func _ready():
+	add_to_group('PopochiuClickable')
+	
 	connect('visibility_changed', self, '_toggle_input')
 
 	if clickable:
