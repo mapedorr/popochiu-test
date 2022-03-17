@@ -1,6 +1,6 @@
 tool
-class_name Prop, 'res://addons/Popochiu/icons/prop.png'
-extends 'res://addons/Popochiu/Engine/Objects/Clickable/Clickable.gd'
+class_name PopochiuProp, 'res://addons/Popochiu/icons/prop.png'
+extends 'res://addons/Popochiu/Engine/Objects/Clickable/PopochiuClickable.gd'
 # Elementos visuales para las habitaciones. Pueden tener interacción.
 # Ej: las imágenes de fondo y primer plano, un objeto que se puede agarrar...
 

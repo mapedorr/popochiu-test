@@ -5,7 +5,7 @@ extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 # la habitación a la que pertenece.
 
 const PROP_SCRIPT_TEMPLATE := 'res://addons/Popochiu/Engine/Templates/PropTemplate.gd'
-const BASE_PROP_PATH := 'res://addons/Popochiu/Engine/Objects/Prop/Prop.tscn'
+const BASE_PROP_PATH := 'res://addons/Popochiu/Engine/Objects/Prop/PopochiuProp.tscn'
 const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
 
 var room_tab: VBoxContainer = null
@@ -73,7 +73,7 @@ func create() -> void:
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Crear la prop a agregar a la habitación
-	var prop: Prop = ResourceLoader.load(BASE_PROP_PATH).instance()
+	var prop: PopochiuProp = ResourceLoader.load(BASE_PROP_PATH).instance()
 	if _interaction_checkbox.pressed:
 		prop.set_script(ResourceLoader.load(_new_prop_path + '.gd'))
 	prop.name = _new_prop_name

@@ -3,7 +3,7 @@ extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 # Permite crear una nueva Region para una habitación.
 
 const SCRIPT_TEMPLATE := 'res://addons/Popochiu/Engine/Templates/RegionTemplate.gd'
-const REGION_SCENE := 'res://addons/Popochiu/Engine/Objects/Region/Region.tscn'
+const REGION_SCENE := 'res://addons/Popochiu/Engine/Objects/Region/PopochiuRegion.tscn'
 
 var room_tab: VBoxContainer = null
 
@@ -57,7 +57,7 @@ func create() -> void:
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Crear la región a agregar a la habitación
-	var region: Region = ResourceLoader.load(REGION_SCENE).instance()
+	var region: PopochiuRegion = ResourceLoader.load(REGION_SCENE).instance()
 	region.set_script(ResourceLoader.load(_new_region_path + '.gd'))
 	region.name = _new_region_name
 	region.script_name = _new_region_name

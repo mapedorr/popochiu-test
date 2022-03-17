@@ -4,7 +4,6 @@ extends Area2D
 # salida del cursor.
 
 const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
-#const PopochiuRoom := preload('res://addons/Popochiu/Engine/Objects/Room/PopochiuRoom.gd')
 
 export var description := ''
 export var clickable := true
@@ -15,7 +14,7 @@ export(CURSOR_TYPE) var cursor
 export var script_name := ''
 export var always_on_top := false
 
-var room: Node2D = null
+var room: Node2D = null # It is a PopochiuRoom
 
 onready var _description_code := description
 
@@ -162,4 +161,6 @@ func _toggle_input() -> void:
 
 func _translate() -> void:
 	if Engine.editor_hint or not is_inside_tree() or not E.use_translations: return
-	description = E.get_text('%s-%s' % [get_tree().current_scene.name, _description_code])
+	description = E.get_text(
+		'%s-%s' % [get_tree().current_scene.name, _description_code]
+	)

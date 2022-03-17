@@ -1,6 +1,6 @@
 tool
 class_name PopochiuCharacter, 'res://addons/Popochiu/icons/character.png'
-extends 'res://addons/Popochiu/Engine/Objects/Clickable/Clickable.gd'
+extends 'res://addons/Popochiu/Engine/Objects/Clickable/PopochiuClickable.gd'
 # Cualquier objeto que pueda hablar, caminar, moverse entre habitaciones, tener
 # inventario, entre otras muchas cosas.
 

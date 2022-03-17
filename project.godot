@@ -9,11 +9,6 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Area2D",
-"class": "Hotspot",
-"language": "GDScript",
-"path": "res://addons/Popochiu/Engine/Objects/Hotspot/Hotspot.gd"
-}, {
 "base": "Control",
 "class": "InventoryItem",
 "language": "GDScript",
@@ -39,10 +34,25 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/Popochiu/Editor/MainDock/PopochiuGroup/PopochiuGroup.gd"
 }, {
+"base": "Area2D",
+"class": "PopochiuHotspot",
+"language": "GDScript",
+"path": "res://addons/Popochiu/Engine/Objects/Hotspot/PopochiuHotspot.gd"
+}, {
 "base": "Resource",
 "class": "PopochiuInventoryItemData",
 "language": "GDScript",
 "path": "res://addons/Popochiu/Engine/Objects/InventoryItem/PopochiuInventoryItemData.gd"
+}, {
+"base": "Area2D",
+"class": "PopochiuProp",
+"language": "GDScript",
+"path": "res://addons/Popochiu/Engine/Objects/Prop/PopochiuProp.gd"
+}, {
+"base": "Area2D",
+"class": "PopochiuRegion",
+"language": "GDScript",
+"path": "res://addons/Popochiu/Engine/Objects/Region/PopochiuRegion.gd"
 }, {
 "base": "Node2D",
 "class": "PopochiuRoom",
@@ -53,29 +63,19 @@ _global_script_classes=[ {
 "class": "PopochiuRoomData",
 "language": "GDScript",
 "path": "res://addons/Popochiu/Engine/Objects/Room/PopochiuRoomData.gd"
-}, {
-"base": "Area2D",
-"class": "Prop",
-"language": "GDScript",
-"path": "res://addons/Popochiu/Engine/Objects/Prop/Prop.gd"
-}, {
-"base": "Area2D",
-"class": "Region",
-"language": "GDScript",
-"path": "res://addons/Popochiu/Engine/Objects/Region/Region.gd"
 } ]
 _global_script_class_icons={
-"Hotspot": "res://addons/Popochiu/icons/hotspot.png",
 "InventoryItem": "res://addons/Popochiu/icons/inventory_item.png",
 "PopochiuCharacter": "res://addons/Popochiu/icons/character.png",
 "PopochiuCharacterData": "res://addons/Popochiu/icons/character.png",
 "PopochiuDialog": "res://addons/Popochiu/icons/dialog.png",
 "PopochiuGroup": "res://addons/Popochiu/Editor/MainDock/PopochiuGroup/popochiu_group.svg",
+"PopochiuHotspot": "res://addons/Popochiu/icons/hotspot.png",
 "PopochiuInventoryItemData": "res://addons/Popochiu/icons/inventory_item.png",
+"PopochiuProp": "res://addons/Popochiu/icons/prop.png",
+"PopochiuRegion": "res://addons/Popochiu/icons/region.png",
 "PopochiuRoom": "res://addons/Popochiu/icons/room.png",
-"PopochiuRoomData": "res://addons/Popochiu/icons/room.png",
-"Prop": "res://addons/Popochiu/icons/prop.png",
-"Region": "res://addons/Popochiu/icons/region.png"
+"PopochiuRoomData": "res://addons/Popochiu/icons/room.png"
 }
 
 [application]

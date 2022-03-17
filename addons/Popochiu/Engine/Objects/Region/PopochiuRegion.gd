@@ -1,5 +1,5 @@
 tool
-class_name Region, 'res://addons/Popochiu/icons/region.png'
+class_name PopochiuRegion, 'res://addons/Popochiu/icons/region.png'
 extends Area2D
 
 export var script_name := ''

@@ -155,15 +155,15 @@ func get_point(point_name: String) -> Vector2:
 	return Vector2.ZERO
 
 
-func get_prop(prop_name: String) -> Prop:
+func get_prop(prop_name: String) -> PopochiuProp:
 	for p in $Props.get_children():
 		if p.script_name == prop_name or p.name == prop_name:
-			return p as Prop
+			return p as PopochiuProp
 	printerr('PopochiuRoom[%s].get_prop: No se encontró la Prop %s' % [script_name, prop_name])
 	return null
 
 
-func get_hotspot(hotspot_name: String) -> Hotspot:
+func get_hotspot(hotspot_name: String) -> PopochiuHotspot:
 	for h in $Hotspots.get_children():
 		if h.script_name == hotspot_name or h.name == hotspot_name:
 			return h

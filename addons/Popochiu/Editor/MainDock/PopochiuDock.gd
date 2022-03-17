@@ -16,12 +16,11 @@ const CHARACTERS_PATH := 'res://popochiu/Characters/'
 const INVENTORY_ITEMS_PATH := 'res://popochiu/InventoryItems/'
 const DIALOGS_PATH := 'res://popochiu/Dialogs/'
 const PopochiuObjectRow := preload('ObjectRow/PopochiuObjectRow.gd')
-const Popochiu := preload('res://addons/Popochiu/Engine/Popochiu.gd')
 
 var ei: EditorInterface
 var fs: EditorFileSystem
 var dir := Directory.new()
-var popochiu: Popochiu = null
+var popochiu: Node = null
 var last_selected: PopochiuObjectRow = null
 
 var _has_data := false
@@ -193,7 +192,9 @@ func add_resource_to_popochiu(target: String, resource: Resource) -> int:
 func save_popochiu() -> int:
 	var result := OK
 	var new_popochiu: PackedScene = PackedScene.new()
+	
 	new_popochiu.pack(popochiu)
+	
 	result = ResourceSaver.save(POPOCHIU_SCENE, new_popochiu)
 	if result != OK:
 		push_error('---- ◇ Error al actualizar Popochiu: %d ◇ ----' % result)

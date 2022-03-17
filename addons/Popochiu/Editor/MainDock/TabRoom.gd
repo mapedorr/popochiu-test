@@ -20,21 +20,21 @@ onready var _types := {
 		group = find_node('PropsGroup'),
 		popup = 'CreateProp',
 		method = 'get_props',
-		type_class = Prop,
+		type_class = PopochiuProp,
 		parent = 'Props'
 	},
 	Types.HOTSPOT: {
 		group = find_node('HotspotsGroup'),
 		popup = 'CreateHotspot',
 		method = 'get_hotspots',
-		type_class = Hotspot,
+		type_class = PopochiuHotspot,
 		parent = 'Hotspots'
 	},
 	Types.REGION: {
 		group = find_node('RegionsGroup'),
 		popup = 'CreateRegion',
 		method = 'get_regions',
-		type_class = Region,
+		type_class = PopochiuRegion,
 		parent = 'Regions'
 	},
 	Types.POINT: {

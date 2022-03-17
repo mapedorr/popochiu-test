@@ -3,7 +3,7 @@ extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 # Permite crear un nuevo Hotspot para una habitación.
 
 const SCRIPT_TEMPLATE := 'res://addons/Popochiu/Engine/Templates/HotspotTemplate.gd'
-const HOTSPOT_SCENE := 'res://addons/Popochiu/Engine/Objects/Hotspot/Hotspot.tscn'
+const HOTSPOT_SCENE := 'res://addons/Popochiu/Engine/Objects/Hotspot/PopochiuHotspot.tscn'
 const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
 
 var room_tab: VBoxContainer = null
@@ -58,7 +58,7 @@ func create() -> void:
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Crear el hotspot a agregar a la habitación
-	var hotspot: Hotspot = ResourceLoader.load(HOTSPOT_SCENE).instance()
+	var hotspot: PopochiuHotspot = ResourceLoader.load(HOTSPOT_SCENE).instance()
 	hotspot.set_script(ResourceLoader.load(_new_hotspot_path + '.gd'))
 	hotspot.name = _new_hotspot_name
 	hotspot.script_name = _new_hotspot_name

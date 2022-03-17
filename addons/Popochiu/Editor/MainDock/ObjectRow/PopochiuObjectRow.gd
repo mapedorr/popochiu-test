@@ -8,7 +8,6 @@ signal clicked(node)
 enum MenuOptions { ADD_TO_CORE, SET_AS_MAIN, DELETE }
 
 const SELECTED_FONT_COLOR := Color('706deb')
-const Popochiu := preload('res://addons/Popochiu/Engine/Popochiu.gd')
 const AudioCue := preload('res://addons/Popochiu/Engine/AudioManager/AudioCue.gd')
 
 var type := -1
@@ -134,7 +133,7 @@ func _menu_item_pressed(id: int) -> void:
 # que pueda ser usado (p. ej. Que se pueda navegar a la habitación, que se pueda
 # mostrar a un personaje en una habitación, etc.).
 func _add_object_to_core() -> void:
-	var popochiu: Popochiu = main_dock.get_popochiu()
+	var popochiu: Node = main_dock.get_popochiu()
 	var target_array := ''
 	var resource: Resource
 	
@@ -233,7 +232,7 @@ func _search_audio_files(dir: EditorFileSystemDirectory) -> Array:
 
 func _delete_from_core() -> void:
 	# Eliminar el objeto de Popochiu -------------------------------------------
-	var popochiu: Popochiu = main_dock.get_popochiu()
+	var popochiu: Node = main_dock.get_popochiu()
 	
 	match type:
 		main_dock.Types.ROOM:
@@ -366,10 +365,10 @@ func _delete_files(dir: EditorFileSystemDirectory) -> int:
 	
 	for fp in files_paths:
 		# Así es como se hace en el código fuente del motor para que se eliminen
-		# también los .import asociados a los archivos importados. ------------
+		# también los .import asociados a los archivos importados. ————————————
 		var err: int = main_dock.dir.remove(fp)
 		main_dock.fs.update_file(fp)
-		# ---------------------------------------------------------------------
+		# —————————————————————————————————————————————————————————————————————
 		if err != OK:
 			push_error('[Popochiu(err_code:%d)] Could not delete file %s' %\
 			[err, fp])
