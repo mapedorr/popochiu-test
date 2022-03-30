@@ -81,6 +81,7 @@ _global_script_class_icons={
 [application]
 
 config/name="popochiu_dev"
+run/main_scene="res://popochiu/Rooms/Janitor/RoomJanitor.tscn"
 config/icon="res://icon.png"
 
 [autoload]

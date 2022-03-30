@@ -7,6 +7,7 @@ const INVENTORY_ITEM_SCRIPT_TEMPLATE := \
 'res://addons/Popochiu/Engine/Templates/InventoryItemTemplate.gd'
 const BASE_INVENTORY_ITEM_PATH := \
 'res://addons/Popochiu/Engine/Objects/InventoryItem/PopochiuInventoryItem.tscn'
+const Constants := preload('res://addons/Popochiu/Constants.gd')
 
 var _new_item_name := ''
 var _new_item_path := ''
@@ -90,7 +91,7 @@ func create() -> void:
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Actualizar la lista de habitaciones en el Dock
-	_main_dock.add_to_list(_main_dock.Types.INVENTORY_ITEM, _new_item_name)
+	_main_dock.add_to_list(Constants.Types.INVENTORY_ITEM, _new_item_name)
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Abrir la escena creada en el editor

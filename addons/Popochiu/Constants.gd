@@ -1,5 +1,17 @@
 extends Node
 
+enum Types {
+	ROOM,
+	CHARACTER,
+	INVENTORY_ITEM,
+	DIALOG,
+	# Room's object types
+	PROP,
+	HOTSPOT,
+	REGION,
+	POINT
+}
+
 const BASE_DIR := 'res://popochiu'
 const MAIN_DOCK_PATH := 'res://addons/Popochiu/Editor/MainDock/PopochiuDock.tscn'
 const EMPTY_DOCK_PATH := 'res://addons/Popochiu/Editor/MainDock/EmptyDock.tscn'

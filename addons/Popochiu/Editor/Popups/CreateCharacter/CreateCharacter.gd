@@ -6,6 +6,7 @@ extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 const CHARACTER_SCRIPT_TEMPLATE := 'res://addons/Popochiu/Engine/Templates/CharacterTemplate.gd'
 const CHARACTER_SCENE := 'res://addons/Popochiu/Engine/Objects/Character/PopochiuCharacter.tscn'
 const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
+const Constants := preload('res://addons/Popochiu/Constants.gd')
 
 var _new_character_name := ''
 var _new_character_path := ''
@@ -90,7 +91,7 @@ func create() -> void:
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Actualizar la lista de habitaciones en el Dock
-	_main_dock.add_to_list(_main_dock.Types.CHARACTER, _new_character_name)
+	_main_dock.add_to_list(Constants.Types.CHARACTER, _new_character_name)
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Abrir la escena creada en el editor

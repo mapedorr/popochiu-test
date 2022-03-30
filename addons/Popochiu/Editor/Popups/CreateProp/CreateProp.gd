@@ -7,6 +7,7 @@ extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 const PROP_SCRIPT_TEMPLATE := 'res://addons/Popochiu/Engine/Templates/PropTemplate.gd'
 const BASE_PROP_PATH := 'res://addons/Popochiu/Engine/Objects/Prop/PopochiuProp.tscn'
 const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
+const Constants := preload('res://addons/Popochiu/Constants.gd')
 
 var room_tab: VBoxContainer = null
 
@@ -89,8 +90,13 @@ func create() -> void:
 	_main_dock.ei.save_scene()
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-	# Actualizar la lista de props de la habitación
-	room_tab.add_to_list(room_tab.Types.PROP, _new_prop_name)
+	# Update the list of Props in the Room tab
+	if _interaction_checkbox.pressed:
+		room_tab.add_to_list(
+			Constants.Types.PROP, _new_prop_name, _new_prop_path.get_base_dir()
+		)
+	else:
+		room_tab.add_to_list(Constants.Types.PROP, _new_prop_name)
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Abrir las propiedades de la prop creada en el Inspector

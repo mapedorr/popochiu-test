@@ -5,6 +5,7 @@ extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 const SCRIPT_TEMPLATE := 'res://addons/Popochiu/Engine/Templates/HotspotTemplate.gd'
 const HOTSPOT_SCENE := 'res://addons/Popochiu/Engine/Objects/Hotspot/PopochiuHotspot.tscn'
 const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
+const Constants := preload('res://addons/Popochiu/Constants.gd')
 
 var room_tab: VBoxContainer = null
 
@@ -72,8 +73,12 @@ func create() -> void:
 	_main_dock.ei.save_scene()
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-	# Actualizar la lista de hotspots de la habitación
-	room_tab.add_to_list(room_tab.Types.HOTSPOT, _new_hotspot_name)
+	# Update the list of Hotspots in the Room tab
+	room_tab.add_to_list(
+		Constants.Types.HOTSPOT,
+		_new_hotspot_name,
+		_new_hotspot_path.get_base_dir()
+	)
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Abrir las propiedades del hotspot creado en el Inspector

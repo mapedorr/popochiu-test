@@ -159,7 +159,7 @@ func get_prop(prop_name: String) -> PopochiuProp:
 	for p in $Props.get_children():
 		if p.script_name == prop_name or p.name == prop_name:
 			return p as PopochiuProp
-	printerr('PopochiuRoom[%s].get_prop: No se encontró la Prop %s' % [script_name, prop_name])
+	printerr('PopochiuRoom[%s].get_prop: Prop %s not found' % [script_name, prop_name])
 	return null
 
 
@@ -167,8 +167,17 @@ func get_hotspot(hotspot_name: String) -> PopochiuHotspot:
 	for h in $Hotspots.get_children():
 		if h.script_name == hotspot_name or h.name == hotspot_name:
 			return h
-	printerr('PopochiuRoom[%s].get_hotspot: No se encontró el Hotspot %s' %\
+	printerr('PopochiuRoom[%s].get_hotspot: Hotspot %s not found' %\
 	[script_name, hotspot_name])
+	return null
+
+
+func get_region(region_name: String) -> PopochiuRegion:
+	for r in $Regions.get_children():
+		if r.script_name == region_name or r.name == region_name:
+			return r
+	printerr('PopochiuRoom[%s].get_region: Region %s not found' %\
+	[script_name, region_name])
 	return null
 
 
