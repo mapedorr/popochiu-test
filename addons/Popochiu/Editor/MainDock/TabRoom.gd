@@ -73,14 +73,19 @@ func scene_changed(scene_root: Node) -> void:
 		
 		for t in _types:
 			for c in opened_room.call(_types[t].method):
-				var row_path: String = '%s/%s/%s' % [
-					opened_room.filename.get_base_dir(),
-					_types[t].parent,
-					c.name
-				]
+				var row_path := ''
+				
+				if c.script.resource_path.find('addons') == -1:
+					row_path = c.script.resource_path
+				else:
+					row_path = '%s/%s' % [
+						opened_room.filename.get_base_dir(),
+						_types[t].parent
+					]
 				
 				if row_path in _rows_paths: continue
 				
+				prints(row_path)
 				if c is _types[t].type_class:
 					var row: PopochiuObjectRow = _create_object_row(
 						t, c.name, row_path

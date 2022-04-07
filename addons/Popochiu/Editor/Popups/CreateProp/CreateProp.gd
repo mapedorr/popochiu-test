@@ -45,15 +45,16 @@ func create() -> void:
 		_error_feedback.show()
 		return
 	
-	# TODO: Verificar si no hay ya una prop en el mismo PATH.
-	# TODO: Eliminar archivos creados si la creación no se completa.
+	# TODO: Check if another Prop was created in the same PATH.
+	# TODO: Remove created files if the creation process failed.
+	var script_path := _new_prop_path + '.gd'
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	if _interaction_checkbox.pressed:
-		# Crear el directorio donde se guardará la nueva prop
+		# Create the folder for the Prop
 		assert(
 			_main_dock.dir.make_dir_recursive(_new_prop_path.get_base_dir()) == OK,
-			'[Popochiu] Could not create prop folder for ' + _new_prop_name
+			'[Popochiu] Could not create Prop folder for ' + _new_prop_name
 		)
 	elif not _main_dock.dir.dir_exists(_room_dir + '/Props/'):
 		# If the Prop doesn't have interaction, just try to create the Props
@@ -67,7 +68,7 @@ func create() -> void:
 	# Crear el script de la prop (si tiene interacción)
 	if _interaction_checkbox.pressed:
 		var prop_template := load(PROP_SCRIPT_TEMPLATE)
-		if ResourceSaver.save(_new_prop_path + '.gd', prop_template) != OK:
+		if ResourceSaver.save(script_path, prop_template) != OK:
 			push_error('[Popochiu] Could not create script: %s.gd' % _new_prop_name)
 			# TODO: Mostrar retroalimentación en el mismo popup
 			return
@@ -76,7 +77,7 @@ func create() -> void:
 	# Crear la prop a agregar a la habitación
 	var prop: PopochiuProp = ResourceLoader.load(BASE_PROP_PATH).instance()
 	if _interaction_checkbox.pressed:
-		prop.set_script(ResourceLoader.load(_new_prop_path + '.gd'))
+		prop.set_script(ResourceLoader.load(script_path))
 	prop.name = _new_prop_name
 	prop.script_name = _new_prop_name
 	prop.description = _new_prop_name
@@ -93,7 +94,9 @@ func create() -> void:
 	# Update the list of Props in the Room tab
 	if _interaction_checkbox.pressed:
 		room_tab.add_to_list(
-			Constants.Types.PROP, _new_prop_name, _new_prop_path.get_base_dir()
+			Constants.Types.PROP,
+			_new_prop_name,
+			script_path
 		)
 	else:
 		room_tab.add_to_list(Constants.Types.PROP, _new_prop_name)
@@ -104,7 +107,7 @@ func create() -> void:
 	_main_dock.ei.edit_node(prop)
 	
 	if _interaction_checkbox.pressed:
-		_main_dock.ei.select_file(_new_prop_path + '.gd')
+		_main_dock.ei.select_file(script_path)
 	else:
 		_main_dock.ei.select_file(_room_path)
 	

@@ -55,6 +55,8 @@ onready var _menu_cfg := [
 			Constants.Types.INVENTORY_ITEM,
 			Constants.Types.DIALOG,
 			Constants.Types.PROP,
+			Constants.Types.HOTSPOT,
+			Constants.Types.REGION,
 		]
 	}
 ]
@@ -63,6 +65,7 @@ onready var _menu_cfg := [
 # ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ métodos de Godot ░░░░
 func _ready() -> void:
 	_label.text = name
+	hint_tooltip = path
 	
 	# Definir iconos
 	_fav_icon.texture = get_icon('Heart', 'EditorIcons')
@@ -193,7 +196,7 @@ func _remove_object() -> void:
 		# res://popochiu/Rooms/???/Props/??/ > [res:, popochiu, Rooms, ???, Props, ??]
 		location = "%s's room" % path.split('/', false)[3]
 	
-	# Look in the Object's folder for audio files and AudioCues to show the
+	# Look into the Object's folder for audio files and AudioCues to show the
 	# developer that those files will be removed too.
 	var audio_files := _search_audio_files(
 		main_dock.fs.get_filesystem_path(path.get_base_dir())
@@ -207,7 +210,7 @@ func _remove_object() -> void:
 		' Uses of this object in scripts will not work anymore.' +\
 		' This action cannot be reversed. Continue?',
 		# Additional confirmation
-		'Delete [b]%s[/b] folder too?' % path.get_base_dir() +\
+		'Delete [b]%s[/b] folder/file too?' % path.get_base_dir() +\
 		(' ([b]%d[/b] audio files will be deleted' % audio_files.size()\
 		if audio_files.size() > 0\
 		else '') +\
@@ -223,7 +226,6 @@ func _remove_object() -> void:
 
 func _search_audio_files(dir: EditorFileSystemDirectory) -> Array:
 	var files := []
-#	var paths_to_erase := []
 	
 	for idx in dir.get_subdir_count():
 		files.append_array(_search_audio_files(dir.get_subdir(idx)))
@@ -232,23 +234,19 @@ func _search_audio_files(dir: EditorFileSystemDirectory) -> Array:
 		match dir.get_file_type(idx):
 			'AudioStreamOGGVorbis', 'AudioStreamMP3', 'AudioStreamSample':
 				files.append(dir.get_file_path(idx))
-#			'Resource':
-#				var resource: Resource = load(dir.get_file_path(idx))
-#				if resource is AudioCue:
-#					files.append(dir.get_file_path(idx))
-#					paths_to_erase.append(resource.audio.resource_path)
-	
-#	if path in paths_to_erase:
-#		files.erase(path)
 	
 	return files
 
 
 func _remove_from_core() -> void:
 	# Eliminar el objeto de Popochiu -------------------------------------------
-	var popochiu: Node = main_dock.get_popochiu()
+	var popochiu: Node = null
 	
 	match type:
+		Constants.Types.ROOM, Constants.Types.CHARACTER,\
+		Constants.Types.INVENTORY_ITEM, Constants.Types.DIALOG:
+			popochiu = main_dock.get_popochiu()
+			continue
 		Constants.Types.ROOM:
 			for r in popochiu.rooms:
 				if (r as PopochiuRoomData).script_name == name:
@@ -291,10 +289,13 @@ func _remove_from_core() -> void:
 				_disconnect_popup()
 				return
 	
-	if main_dock.save_popochiu() != OK:
-		push_error('[Popochiu] Could not remove Object from Popochiu: %s' %\
-		name)
-		# TODO: Mostrar retroalimentación en el mismo popup
+	if popochiu:
+		# Save changes in Popochiu.tscn if the deleted object was a Room,
+		# a Character, an Inventory item or a Dialog.
+		if main_dock.save_popochiu() != OK:
+			push_error('[Popochiu] Could not remove Object from Popochiu: %s' %\
+			name)
+			# TODO: Mostrar retroalimentación en el mismo popup
 	
 	if _delete_all_checkbox.pressed:
 		_delete_from_file_system()
@@ -302,37 +303,42 @@ func _remove_from_core() -> void:
 		show_add_to_core()
 	
 	_disconnect_popup()
+	
+	if not popochiu:
+		main_dock.ei.save_scene()
 
 
-# Elimina el directorio del objeto del sistema.
+# Remove this object's directory (subfolders included) from the file system.
 func _delete_from_file_system() -> void:
-	# Eliminar la carpeta del disco y todas sus subcarpetas y archivos si la
-	# desarrolladora así lo quiso
 	var object_dir: EditorFileSystemDirectory = \
 		main_dock.fs.get_filesystem_path(path.get_base_dir())
 	
-	# Eliminar primero los archivos y subcarpetas (con sus respectivos archivos)
+	# Remove files, sub folders and its files.
 	assert(
 		_recursive_delete(object_dir) == OK,
 		'[Popochiu] Error in recursive elimination of %s' % path.get_base_dir()
 	)
 	
-	# Eliminar la carpeta del objeto
+	# Remove the object's folder
 	assert(
 		main_dock.dir.remove(path.get_base_dir()) == OK,
 		'[Popochiu] Could not delete folder: %s' % path.get_base_dir()
 	)
 
-	# Forzar que se actualice la estructura de archivos en el EditorFileSystem
+	# Update the file system structure in the EditorFileSystem.
 	main_dock.fs.scan()
 	main_dock.fs.scan_sources()
 	
-	assert(
-		main_dock.save_popochiu() == OK,
-		'[Popochiu] Could not delete directory in filesystem: %s' % path.get_base_dir()
-	)
+	match type:
+		Constants.Types.ROOM, Constants.Types.CHARACTER,\
+		Constants.Types.INVENTORY_ITEM, Constants.Types.DIALOG:
+			assert(
+				main_dock.save_popochiu() == OK,
+				'[Popochiu] Could not delete directory in filesystem: %s' %\
+				path.get_base_dir()
+			)
 
-	# Eliminar el objeto de su lista -------------------------------------------
+	# Delete the element's row -------------------------------------------------
 	queue_free()
 
 

@@ -77,7 +77,8 @@ func _unhandled_input(event):
 			if I.active: I.set_active_item()
 		return
 
-	C.player.walk(get_local_mouse_position(), false)
+	if is_instance_valid(C.player):
+		C.player.walk(get_local_mouse_position(), false)
 
 
 func _get_property_list():

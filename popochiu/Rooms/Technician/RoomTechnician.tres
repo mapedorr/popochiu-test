@@ -3,7 +3,7 @@
 [ext_resource path="res://addons/Popochiu/Engine/Objects/Room/PopochiuRoomData.gd" type="Script" id=1]
 
 [resource]
-resource_name = "Janitor"
+resource_name = "Technician"
 script = ExtResource( 1 )
-script_name = "Janitor"
-scene = "res://popochiu/Rooms/Janitor/RoomJanitor.tscn"
+script_name = "Technician"
+scene = "res://popochiu/Rooms/Technician/RoomTechnician.tscn"
