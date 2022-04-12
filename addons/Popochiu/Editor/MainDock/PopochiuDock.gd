@@ -146,6 +146,9 @@ func fill_data() -> void:
 						is_in_core = popochiu.characters.has(resource)
 					Constants.Types.INVENTORY_ITEM:
 						is_in_core = popochiu.inventory_items.has(resource)
+						
+						if resource.script_name in popochiu.items_on_start:
+							row.is_on_start = true
 					Constants.Types.DIALOG:
 						is_in_core = popochiu.dialogs.has(resource)
 				
