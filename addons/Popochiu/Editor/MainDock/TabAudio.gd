@@ -49,7 +49,7 @@ onready var _am_search_files: Button = find_node('BtnSearchAudioFiles')
 func _ready() -> void:
 	audio_manager = load(AUDIO_MANAGER_SCENE).instance()
 	_am_search_files.icon = get_icon('Search', 'EditorIcons')
-	_am_search_files.connect('pressed', self, '_search_audio_files')
+	_am_search_files.connect('pressed', self, 'search_audio_files')
 
 
 # ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ métodos públicos ░░░░

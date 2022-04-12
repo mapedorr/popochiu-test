@@ -8,6 +8,9 @@ __meta__ = {
 "_edit_group_": true
 }
 
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -10, -10, 10, -10, 10, 10, -10, 10 )
+
 [node name="BaselineHelper" type="Line2D" parent="."]
 visible = false
 points = PoolVector2Array( -10000, 0, 10000, 0 )

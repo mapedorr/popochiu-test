@@ -45,6 +45,7 @@ func _enter_tree() -> void:
 	main_dock = load(Constants.MAIN_DOCK_PATH).instance()
 	main_dock.ei = _editor_interface
 	main_dock.fs = _editor_file_system
+	main_dock.focus_mode = Control.FOCUS_ALL
 
 	main_dock.connect('room_row_clicked', self, 'update_overlays')
 	add_control_to_dock(DOCK_SLOT_RIGHT_BR, main_dock)
@@ -317,7 +318,8 @@ func _on_sources_changed(exist: bool) -> void:
 # scene tree.
 func _check_nodes() -> void:
 	for n in _shown_helpers:
-		n.hide_helpers()
+		if is_instance_valid(n):
+			n.hide_helpers()
 	
 	_shown_helpers.clear()
 	

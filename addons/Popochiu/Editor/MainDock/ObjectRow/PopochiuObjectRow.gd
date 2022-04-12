@@ -8,6 +8,7 @@ signal clicked(node)
 enum MenuOptions { ADD_TO_CORE, SET_AS_MAIN, DELETE }
 
 const SELECTED_FONT_COLOR := Color('706deb')
+const Constants := preload('res://addons/Popochiu/Constants.gd')
 const AudioCue := preload('res://addons/Popochiu/Engine/AudioManager/AudioCue.gd')
 
 var type := -1
@@ -31,17 +32,17 @@ onready var _menu_cfg := [
 		'res://addons/Popochiu/Editor/MainDock/ObjectRow/add_to_core.png'),
 		label = 'Add to Popochiu',
 		types = [
-			main_dock.Types.ROOM,
-			main_dock.Types.CHARACTER,
-			main_dock.Types.INVENTORY_ITEM,
-			main_dock.Types.DIALOG
+			Constants.Types.ROOM,
+			Constants.Types.CHARACTER,
+			Constants.Types.INVENTORY_ITEM,
+			Constants.Types.DIALOG
 		]
 	},
 	{
 		id = MenuOptions.SET_AS_MAIN,
 		icon = get_icon('Heart', 'EditorIcons'),
 		label = 'Set as Main scene',
-		types = [main_dock.Types.ROOM]
+		types = [Constants.Types.ROOM]
 	},
 	null,
 	{
@@ -49,10 +50,13 @@ onready var _menu_cfg := [
 		icon = get_icon('Remove', 'EditorIcons'),
 		label = 'Remove',
 		types = [
-			main_dock.Types.ROOM,
-			main_dock.Types.CHARACTER,
-			main_dock.Types.INVENTORY_ITEM,
-			main_dock.Types.DIALOG
+			Constants.Types.ROOM,
+			Constants.Types.CHARACTER,
+			Constants.Types.INVENTORY_ITEM,
+			Constants.Types.DIALOG,
+			Constants.Types.PROP,
+			Constants.Types.HOTSPOT,
+			Constants.Types.REGION,
 		]
 	}
 ]
@@ -61,6 +65,7 @@ onready var _menu_cfg := [
 # ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ métodos de Godot ░░░░
 func _ready() -> void:
 	_label.text = name
+	hint_tooltip = path
 	
 	# Definir iconos
 	_fav_icon.texture = get_icon('Heart', 'EditorIcons')
@@ -125,7 +130,7 @@ func _menu_item_pressed(id: int) -> void:
 			main_dock.set_main_scene(path)
 			self.is_main = true
 		MenuOptions.DELETE:
-			_ask_basic_delete()
+			_remove_object()
 
 
 # Agrega este objeto (representado por una fila en una de las categorías de la
@@ -143,13 +148,13 @@ func _add_object_to_core() -> void:
 		resource = load(path)
 	
 	match type:
-		main_dock.Types.ROOM:
+		Constants.Types.ROOM:
 			target_array = 'rooms'
-		main_dock.Types.CHARACTER:
+		Constants.Types.CHARACTER:
 			target_array = 'characters'
-		main_dock.Types.INVENTORY_ITEM:
+		Constants.Types.INVENTORY_ITEM:
 			target_array = 'inventory_items'
-		main_dock.Types.DIALOG:
+		Constants.Types.DIALOG:
 			target_array = 'dialogs'
 		_:
 			# TODO: Mostrar un mensaje de error o algo.
@@ -179,28 +184,40 @@ func _open() -> void:
 		main_dock.ei.edit_resource(load(path))
 
 
-# Abre un popup de confirmación para saber si la desarrolladora quiere eliminar
-# el objeto del núcleo del plugin y del sistema.
-func _ask_basic_delete() -> void:
-	# Escanear la carpeta en busca de archivos de audio y AudioCues para informar
-	# a la desarrolladora que también se eliminarán archivos de audio.
+# Shows a confirmation popup to ask the developer if the Popochiu object should
+# be removed only from the core, or from the file system too.
+func _remove_object() -> void:
+	var location := 'Popochiu'
+	
+	# Verify if the object to delete is a Prop, a Hotspot or a Region.
+	if type == Constants.Types.PROP\
+	or type == Constants.Types.HOTSPOT\
+	or type == Constants.Types.REGION:
+		# res://popochiu/Rooms/???/Props/??/ > [res:, popochiu, Rooms, ???, Props, ??]
+		location = "%s's room" % path.split('/', false)[3]
+	
+	# Look into the Object's folder for audio files and AudioCues to show the
+	# developer that those files will be removed too.
 	var audio_files := _search_audio_files(
 		main_dock.fs.get_filesystem_path(path.get_base_dir())
 	)
 	
 	main_dock.show_confirmation(
-		'Remove %s from Popochiu' % name,
-		'This will remove the [b]%s[/b] resource in Popochiu.' % name +\
+		# Title
+		'Remove %s from %s' % [name, location],
+		# Body
+		'This will remove the [b]%s[/b] resource in %s.' % [name, location] +\
 		' Uses of this object in scripts will not work anymore.' +\
 		' This action cannot be reversed. Continue?',
-		'Delete [b]%s[/b] folder too?' % path.get_base_dir() +\
+		# Additional confirmation
+		'Delete [b]%s[/b] folder/file too?' % path.get_base_dir() +\
 		(' ([b]%d[/b] audio files will be deleted' % audio_files.size()\
 		if audio_files.size() > 0\
 		else '') +\
 		' (cannot be reversed))'
 	)
 	
-	_delete_dialog.connect('confirmed', self, '_delete_from_core')
+	_delete_dialog.connect('confirmed', self, '_remove_from_core')
 	_delete_dialog.get_cancel().connect('pressed', self, '_disconnect_popup')
 	_delete_dialog.get_close_button().connect(
 		'pressed', self, '_disconnect_popup'
@@ -209,7 +226,6 @@ func _ask_basic_delete() -> void:
 
 func _search_audio_files(dir: EditorFileSystemDirectory) -> Array:
 	var files := []
-#	var paths_to_erase := []
 	
 	for idx in dir.get_subdir_count():
 		files.append_array(_search_audio_files(dir.get_subdir(idx)))
@@ -218,48 +234,68 @@ func _search_audio_files(dir: EditorFileSystemDirectory) -> Array:
 		match dir.get_file_type(idx):
 			'AudioStreamOGGVorbis', 'AudioStreamMP3', 'AudioStreamSample':
 				files.append(dir.get_file_path(idx))
-#			'Resource':
-#				var resource: Resource = load(dir.get_file_path(idx))
-#				if resource is AudioCue:
-#					files.append(dir.get_file_path(idx))
-#					paths_to_erase.append(resource.audio.resource_path)
-	
-#	if path in paths_to_erase:
-#		files.erase(path)
 	
 	return files
 
 
-func _delete_from_core() -> void:
+func _remove_from_core() -> void:
 	# Eliminar el objeto de Popochiu -------------------------------------------
-	var popochiu: Node = main_dock.get_popochiu()
+	var popochiu: Node = null
 	
 	match type:
-		main_dock.Types.ROOM:
+		Constants.Types.ROOM, Constants.Types.CHARACTER,\
+		Constants.Types.INVENTORY_ITEM, Constants.Types.DIALOG:
+			popochiu = main_dock.get_popochiu()
+			continue
+		Constants.Types.ROOM:
 			for r in popochiu.rooms:
 				if (r as PopochiuRoomData).script_name == name:
 					popochiu.rooms.erase(r)
 					break
-		main_dock.Types.CHARACTER:
+		Constants.Types.CHARACTER:
 			for c in popochiu.characters:
 				if (c as PopochiuCharacterData).script_name == name:
 					popochiu.characters.erase(c)
 					break
-		main_dock.Types.INVENTORY_ITEM:
+		Constants.Types.INVENTORY_ITEM:
 			for ii in popochiu.inventory_items:
 				if (ii as PopochiuInventoryItemData).script_name == name:
 					popochiu.inventory_items.erase(ii)
 					break
-		main_dock.Types.DIALOG:
+		Constants.Types.DIALOG:
 			for d in popochiu.dialogs:
 				if (d as PopochiuDialog).script_name == name:
 					popochiu.dialogs.erase(d)
 					break
+		Constants.Types.PROP, Constants.Types.HOTSPOT, Constants.Types.REGION:
+			var opened_room: PopochiuRoom = main_dock.get_opened_room()
+			if opened_room:
+				match type:
+					Constants.Types.PROP:
+						opened_room.get_prop(name).queue_free()
+					Constants.Types.HOTSPOT:
+						opened_room.get_hotspot(name).queue_free()
+					Constants.Types.REGION:
+						opened_room.get_region(name).queue_free()
+				
+				main_dock.ei.save_scene()
+			else:
+				# TODO: open the Room' scene, delete the node and save the Room
+				pass
+			
+			# TODO: If it is a non-interactable Object, just delete the node from the
+			# scene, and maybe its sprite?
+			if not path:
+				_disconnect_popup()
+				return
 	
-	if main_dock.save_popochiu() != OK:
-		push_error('[Popochiu] Could not remove Object from Popochiu: %s' %\
-		name)
-		# TODO: Mostrar retroalimentación en el mismo popup
+	if popochiu:
+		# Save changes in Popochiu.tscn if the deleted object was a Room,
+		# a Character, an Inventory item or a Dialog.
+		if main_dock.save_popochiu() != OK:
+			push_error('[Popochiu] Could not remove Object from Popochiu: %s' %\
+			name)
+			# TODO: Mostrar retroalimentación en el mismo popup
 	
 	if _delete_all_checkbox.pressed:
 		_delete_from_file_system()
@@ -267,37 +303,42 @@ func _delete_from_core() -> void:
 		show_add_to_core()
 	
 	_disconnect_popup()
+	
+	if not popochiu:
+		main_dock.ei.save_scene()
 
 
-# Elimina el directorio del objeto del sistema.
+# Remove this object's directory (subfolders included) from the file system.
 func _delete_from_file_system() -> void:
-	# Eliminar la carpeta del disco y todas sus subcarpetas y archivos si la
-	# desarrolladora así lo quiso
 	var object_dir: EditorFileSystemDirectory = \
 		main_dock.fs.get_filesystem_path(path.get_base_dir())
 	
-	# Eliminar primero los archivos y subcarpetas (con sus respectivos archivos)
+	# Remove files, sub folders and its files.
 	assert(
 		_recursive_delete(object_dir) == OK,
 		'[Popochiu] Error in recursive elimination of %s' % path.get_base_dir()
 	)
 	
-	# Eliminar la carpeta del objeto
+	# Remove the object's folder
 	assert(
 		main_dock.dir.remove(path.get_base_dir()) == OK,
 		'[Popochiu] Could not delete folder: %s' % path.get_base_dir()
 	)
 
-	# Forzar que se actualice la estructura de archivos en el EditorFileSystem
+	# Update the file system structure in the EditorFileSystem.
 	main_dock.fs.scan()
 	main_dock.fs.scan_sources()
 	
-	assert(
-		main_dock.save_popochiu() == OK,
-		'[Popochiu] Could not delete directory in filesystem: %s' % path.get_base_dir()
-	)
+	match type:
+		Constants.Types.ROOM, Constants.Types.CHARACTER,\
+		Constants.Types.INVENTORY_ITEM, Constants.Types.DIALOG:
+			assert(
+				main_dock.save_popochiu() == OK,
+				'[Popochiu] Could not delete directory in filesystem: %s' %\
+				path.get_base_dir()
+			)
 
-	# Eliminar el objeto de su lista -------------------------------------------
+	# Delete the element's row -------------------------------------------------
 	queue_free()
 
 
@@ -384,7 +425,7 @@ func _delete_files(dir: EditorFileSystemDirectory) -> int:
 
 # Se desconecta de las señales del popup utilizado para configurar la eliminación.
 func _disconnect_popup() -> void:
-	_delete_dialog.disconnect('confirmed', self, '_delete_from_core')
+	_delete_dialog.disconnect('confirmed', self, '_remove_from_core')
 	_delete_dialog.get_cancel().disconnect('pressed', self, '_disconnect_popup')
 	_delete_dialog.get_close_button().disconnect(
 		'pressed', self, '_disconnect_popup'
