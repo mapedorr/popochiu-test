@@ -145,7 +145,7 @@ func _menu_item_pressed(id: int) -> void:
 				popochiu.items_on_start = [name]
 			else:
 				if name in popochiu.items_on_start:
-					popochiu.items_on_start.remove(name)
+					popochiu.items_on_start.erase(name)
 				else:
 					popochiu.items_on_start.append(name)
 			
