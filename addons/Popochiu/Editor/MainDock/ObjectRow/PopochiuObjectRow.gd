@@ -5,9 +5,16 @@ extends HBoxContainer
 
 signal clicked(node)
 
-enum MenuOptions { ADD_TO_CORE, SET_AS_MAIN, DELETE }
+enum MenuOptions {
+	ADD_TO_CORE,
+	SET_AS_MAIN,
+	START_WITH_IT,
+	DELETE
+}
 
 const SELECTED_FONT_COLOR := Color('706deb')
+const INVENTORY_START_ICON := preload(\
+'res://addons/Popochiu/icons/inventory_item_start.png')
 const Constants := preload('res://addons/Popochiu/Constants.gd')
 const AudioCue := preload('res://addons/Popochiu/Engine/AudioManager/AudioCue.gd')
 
@@ -15,6 +22,7 @@ var type := -1
 var path := ''
 var main_dock: Panel = null setget _set_main_dock
 var is_main := false setget _set_is_main
+var is_on_start := false setget set_is_on_start
 
 var _delete_dialog: ConfirmationDialog
 var _delete_all_checkbox: CheckBox
@@ -44,20 +52,17 @@ onready var _menu_cfg := [
 		label = 'Set as Main scene',
 		types = [Constants.Types.ROOM]
 	},
+	{
+		id = MenuOptions.START_WITH_IT,
+		icon = INVENTORY_START_ICON,
+		label = 'Start with it',
+		types = [Constants.Types.INVENTORY_ITEM]
+	},
 	null,
 	{
 		id = MenuOptions.DELETE,
 		icon = get_icon('Remove', 'EditorIcons'),
-		label = 'Remove',
-		types = [
-			Constants.Types.ROOM,
-			Constants.Types.CHARACTER,
-			Constants.Types.INVENTORY_ITEM,
-			Constants.Types.DIALOG,
-			Constants.Types.PROP,
-			Constants.Types.HOTSPOT,
-			Constants.Types.REGION,
-		]
+		label = 'Remove'
 	}
 ]
 
@@ -69,6 +74,10 @@ func _ready() -> void:
 	
 	# Definir iconos
 	_fav_icon.texture = get_icon('Heart', 'EditorIcons')
+	
+	if type == Constants.Types.INVENTORY_ITEM:
+		_fav_icon.texture = INVENTORY_START_ICON
+	
 	_btn_open.icon = get_icon('InstanceOptions', 'EditorIcons')
 	_menu_btn.icon = get_icon('GuiTabMenu', 'EditorIcons')
 	
@@ -129,6 +138,24 @@ func _menu_item_pressed(id: int) -> void:
 		MenuOptions.SET_AS_MAIN:
 			main_dock.set_main_scene(path)
 			self.is_main = true
+		MenuOptions.START_WITH_IT:
+			var popochiu: Node = main_dock.get_popochiu()
+			
+			if popochiu.items_on_start.empty():
+				popochiu.items_on_start = [name]
+			else:
+				if name in popochiu.items_on_start:
+					popochiu.items_on_start.erase(name)
+				else:
+					popochiu.items_on_start.append(name)
+			
+			assert(
+				main_dock.save_popochiu() == OK,
+				'[Popochiu] Could not put item "%s" on start' % name
+			)
+			
+			prints('¿Está o no?', name in main_dock.get_popochiu().items_on_start)
+			self.is_on_start = name in main_dock.get_popochiu().items_on_start
 		MenuOptions.DELETE:
 			_remove_object()
 
@@ -442,3 +469,8 @@ func _set_is_main(value: bool) -> void:
 	is_main = value
 	_fav_icon.visible = value
 	_menu_popup.set_item_disabled(MenuOptions.SET_AS_MAIN, value)
+
+
+func set_is_on_start(value: bool) -> void:
+	is_on_start = value
+	_fav_icon.visible = value
