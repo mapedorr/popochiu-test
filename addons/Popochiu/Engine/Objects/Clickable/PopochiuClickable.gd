@@ -1,7 +1,8 @@
 tool
 extends Area2D
-# Permite definir colisiones que reaccionan a los eventos de clic y entrada y
-# salida del cursor.
+# Allows to handle an Area2D that reacts to click events, and mouse entering,
+# and exiting.
+# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
 

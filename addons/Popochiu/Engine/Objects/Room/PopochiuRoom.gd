@@ -1,8 +1,11 @@
-# TODO: ¿Que se llame PopochiuRoomData?
 tool
 class_name PopochiuRoom, 'res://addons/Popochiu/icons/room.png'
 extends Node2D
-# Nodo base para la creación de habitaciones dentro del juego.
+# The scenes used by Popochiu. Can have: Props, Hotspots, Regions, Points and
+# Walkable areas. Characters can move through this and interact with its Props
+# and Hotspots. Regions can be used to trigger methods when a character enters,
+# or leaves.
+# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 
 export var script_name := ''
 export var has_player := true
