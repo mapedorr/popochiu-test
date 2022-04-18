@@ -36,5 +36,3 @@ __meta__ = {
 
 [node name="DialogPos" type="Position2D" parent="."]
 visible = false
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -12,7 +12,9 @@ func on_room_entered() -> void:
 
 
 func on_room_transition_finished() -> void:
-	pass
+	C.player_say('This works so fine...', false)
+#	C.character_say('Bug', 'Holaaaaaaaaaaaaaa', false)
+#	E.run(['Bug: Amiguiiiiiiiiiiiiiiiiis!!!!'])
 
 
 # ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ métodos privados ░░░░
