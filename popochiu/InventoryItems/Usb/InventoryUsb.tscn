@@ -9,7 +9,9 @@ anchor_bottom = 1.0
 size_flags_horizontal = 2
 size_flags_vertical = 2
 script = ExtResource( 1 )
+description = "USB"
 script_name = "Usb"
+cursor = 10
 
 [node name="Icon" type="TextureRect" parent="."]
 margin_right = 14.0

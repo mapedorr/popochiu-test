@@ -5,7 +5,6 @@ extends 'res://addons/Popochiu/Editor/Popups/CreationPopup.gd'
 
 const CHARACTER_SCRIPT_TEMPLATE := 'res://addons/Popochiu/Engine/Templates/CharacterTemplate.gd'
 const CHARACTER_SCENE := 'res://addons/Popochiu/Engine/Objects/Character/PopochiuCharacter.tscn'
-const CURSOR_TYPE := preload('res://addons/Popochiu/Engine/Cursor/Cursor.gd').Type
 const Constants := preload('res://addons/Popochiu/Constants.gd')
 
 var _new_character_name := ''
@@ -54,7 +53,7 @@ func create() -> void:
 	new_character.script_name = _new_character_name
 	new_character.name = 'Character' + _new_character_name
 	new_character.description = _new_character_name
-	new_character.cursor = CURSOR_TYPE.TALK
+	new_character.cursor = Constants.CURSOR_TYPE.TALK
 	
 	# ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 	# Crear el archivo de la escena

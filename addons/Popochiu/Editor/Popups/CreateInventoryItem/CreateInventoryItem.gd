@@ -53,6 +53,8 @@ func create() -> void:
 	#	propiedades por culpa de esa asignación.
 	new_item.set_script(load(_new_item_path + '.gd'))
 	new_item.script_name = _new_item_name
+	new_item.description = _new_item_name.capitalize()
+	new_item.cursor = Constants.CURSOR_TYPE.USE
 	new_item.name = 'Inventory' + _new_item_name
 	new_item.size_flags_horizontal = new_item.SIZE_EXPAND
 	new_item.size_flags_vertical = new_item.SIZE_EXPAND

@@ -14,7 +14,7 @@ onready var _grid: GridContainer = find_node('InventoryGrid')
 # ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ métodos de Godot ░░░░
 func _ready():
 	rect_position.y = _hide_y
-	rect_size.x = _foreground.rect_size.x
+#	rect_size.x = _foreground.rect_size.x
 	
 	# TODO: Hacer algo así para los casos en los que se quiera que el inventario
 	# inicie ya con unos objetos dentro.

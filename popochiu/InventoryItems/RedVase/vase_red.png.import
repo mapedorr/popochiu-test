@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/fg.png-db416cb901482b08e8d6db21b80f148c.stex"
+path="res://.import/vase_red.png-2ce2f7c91ba9e6edab4f0a6ea3b80068.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/Popochiu/Engine/Objects/GraphicInterface/Inventory/fg.png"
-dest_files=[ "res://.import/fg.png-db416cb901482b08e8d6db21b80f148c.stex" ]
+source_file="res://popochiu/InventoryItems/RedVase/vase_red.png"
+dest_files=[ "res://.import/vase_red.png-2ce2f7c91ba9e6edab4f0a6ea3b80068.stex" ]
 
 [params]
 

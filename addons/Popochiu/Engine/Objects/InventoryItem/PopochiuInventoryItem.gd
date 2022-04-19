@@ -49,7 +49,12 @@ func added_to_inventory() -> void:
 func _toggle_description(display: bool) -> void:
 	Cursor.set_cursor(cursor if display else null)
 	G.show_info(description if display else '')
-	emit_signal('description_toggled', description if display else '')
+	if display:
+		emit_signal(
+			'description_toggled', description if description else script_name
+		)
+	else:
+		emit_signal('description_toggled', '')
 
 
 func _on_action_pressed(event: InputEvent) -> void: 
