@@ -7,7 +7,7 @@ export var script_name := ''
 export(CURSOR_TYPE) var cursor
 
 
-# ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ métodos de Godot ░░░░
+# ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ GODOT ░░░░
 func _ready() -> void:
 	connect('pressed', self, 'on_pressed')
 	connect('mouse_entered', self, 'on_mouse_entered')
