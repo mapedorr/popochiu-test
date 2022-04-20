@@ -6,19 +6,20 @@ var is_disabled := false
 
 var _can_hide_inventory := true
 
-onready var _hide_y := rect_position.y - (rect_size.y - 3.5)
-onready var _foreground: TextureRect = find_node('InventoryForeground')
-onready var _grid: GridContainer = find_node('InventoryGrid')
+onready var _hide_y := rect_position.y - (rect_size.y - 4)
 
 
-# ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ métodos de Godot ░░░░
+# ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ GODOT ░░░░
 func _ready():
 	rect_position.y = _hide_y
-	rect_size.x = _foreground.rect_size.x
 	
-	# TODO: Hacer algo así para los casos en los que se quiera que el inventario
-	# inicie ya con unos objetos dentro.
-
+	# Check if there are already items in the inventory (set manually in the scene)
+	for ii in $Box.get_children():
+		if ii is InventoryItem:
+			ii.in_inventory = true
+			ii.connect('description_toggled', self, '_show_item_info')
+			ii.connect('selected', self, '_change_cursor')
+	
 	# Conectarse a señales del yo
 	connect('mouse_entered', self, '_open')
 	connect('mouse_exited', self, '_close')
@@ -31,6 +32,7 @@ func _ready():
 # ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ métodos públicos ░░░░
 func disable() -> void:
 	is_disabled = true
+	
 	$Tween.interpolate_property(
 		self, 'rect_position:y',
 		_hide_y, _hide_y - 3.5,
@@ -41,6 +43,7 @@ func disable() -> void:
 
 func enable() -> void:
 	is_disabled = false
+	
 	$Tween.interpolate_property(
 		self, 'rect_position:y',
 		_hide_y - 3.5, _hide_y,
@@ -52,6 +55,7 @@ func enable() -> void:
 # ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ métodos privados ░░░░
 func _open() -> void:
 	if not is_disabled and rect_position.y != _hide_y: return
+	
 	$Tween.interpolate_property(
 		self, 'rect_position:y',
 		_hide_y if not is_disabled else rect_position.y, 0.0,
@@ -62,7 +66,9 @@ func _open() -> void:
 
 func _close() -> void:
 	yield(get_tree(), 'idle_frame')
+	
 	if not _can_hide_inventory: return
+	
 	$Tween.interpolate_property(
 		self, 'rect_position:y',
 		0.0, _hide_y if not is_disabled else _hide_y - 3.5,
@@ -79,15 +85,16 @@ func _change_cursor(item: InventoryItem) -> void:
 	I.set_active_item(item)
 
 
-func _add_item(item: InventoryItem) -> void:
-	_grid.add_child(item)
+func _add_item(item: InventoryItem, animate := true) -> void:
+	$Box.add_child(item)
 	
 	item.connect('description_toggled', self, '_show_item_info')
 	item.connect('selected', self, '_change_cursor')
 	
-	_open()
-	yield(get_tree().create_timer(2.0), 'timeout')
-	_close()
+	if animate:
+		_open()
+		yield(get_tree().create_timer(2.0), 'timeout')
+		_close()
 
 	I.emit_signal('item_add_done', item)
 
@@ -95,7 +102,8 @@ func _add_item(item: InventoryItem) -> void:
 func _remove_item(item: InventoryItem) -> void:
 	item.disconnect('description_toggled', self, '_show_item_info')
 	item.disconnect('selected', self, '_change_cursor')
-	_grid.remove_child(item)
+	
+	$Box.remove_child(item)
 	
 	yield(get_tree(), 'idle_frame')
 	
